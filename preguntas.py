@@ -12,6 +12,11 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 """
 
+x = 1
+m = x + 2
+
+data = open("data.csv")
+
 
 def pregunta_01():
     """
@@ -21,7 +26,13 @@ def pregunta_01():
     214
 
     """
-    return
+    with open("data.csv") as hd:
+        lista = []
+        for linea in hd:
+            linea = linea.strip().split()
+            numero = int(linea[1])
+            lista.append(numero)
+    return sum(lista)
 
 
 def pregunta_02():
@@ -39,7 +50,24 @@ def pregunta_02():
     ]
 
     """
-    return
+    hd = open("data.csv")
+    lista = []
+    diccionario = {}
+    new_sequence = []
+    for linea in hd:
+        linea = linea.strip().split()
+        letra = linea[0]
+        lista.append((letra, 1))
+
+    lista = sorted(lista, key=lambda x: x[0])
+    # key = A  ---  value = 1
+    for key, value in lista:
+        diccionario[key] = diccionario.get(key, 0) + 1
+
+    for key, value in diccionario.items():
+        new_sequence.append((key, value))
+
+    return new_sequence
 
 
 def pregunta_03():
@@ -57,7 +85,22 @@ def pregunta_03():
     ]
 
     """
-    return
+    lista = []
+    lista2 = []
+    diccionario = {}
+    hd = open("data.csv")
+    for linea in hd:
+        linea = linea.split()
+        lista.append(linea[0:2])
+
+    for key, value in lista:
+        diccionario[key] = diccionario.get(key, 0) + int(value)
+
+    for key, value in diccionario.items():
+        lista2.append((key, value))
+        lista = sorted(lista2, key=lambda x: x[0])
+
+    return lista
 
 
 def pregunta_04():
@@ -82,7 +125,19 @@ def pregunta_04():
     ]
 
     """
-    return
+    lista = []
+    lista2 = []
+    diccionario = {}
+    with open("data.csv") as hd:
+        lista = [linea.rstrip().split()[2] for linea in hd]
+        for fecha in lista:
+            fecha = fecha.split(sep="-")
+            diccionario[fecha[1]] = diccionario.get(fecha[1], 0) + 1
+        lista2 = sorted(
+            [(key, value) for key, value in diccionario.items()], key=lambda x: x[0]
+        )
+
+    return lista2
 
 
 def pregunta_05():
@@ -100,7 +155,27 @@ def pregunta_05():
     ]
 
     """
-    return
+    diccionario = {}
+    lista = []
+    with open("data.csv") as hd:
+
+        for linea in hd:
+            linea = linea.strip().split()
+            letra, num = (linea[0], int(linea[1]))
+            lista.append((letra, num))
+
+        for letra, valor in lista:
+            if letra not in diccionario:
+                diccionario[letra] = {"maxi": valor, "mini": valor}
+            else:
+                diccionario[letra]["maxi"] = max(diccionario[letra]["maxi"], valor)
+                diccionario[letra]["mini"] = min(diccionario[letra]["mini"], valor)
+    lista_resultados = [
+        (letra, valores["maxi"], valores["mini"])
+        for letra, valores in diccionario.items()
+    ]
+    lista_resultados = sorted(lista_resultados, key=lambda x: x[0])
+    return lista_resultados
 
 
 def pregunta_06():
@@ -125,7 +200,31 @@ def pregunta_06():
     ]
 
     """
-    return
+    lista = []
+    diccionario = {}
+    with open("data.csv") as hd:
+
+        for linea in hd:
+            linea = linea.strip().split()[4].split(",")
+            for elemento in linea:
+                elemento, valor = elemento.split(":")
+                lista.append((elemento, int(valor)))
+        for elemento, valor in lista:
+            if elemento not in diccionario:
+                diccionario[elemento] = {"maxi": valor, "mini": valor}
+            else:
+                diccionario[elemento]["maxi"] = max(
+                    diccionario[elemento]["maxi"], valor
+                )
+                diccionario[elemento]["mini"] = min(
+                    diccionario[elemento]["mini"], valor
+                )
+    lista_resultados = [
+        (elemento, valores["mini"], valores["maxi"])
+        for elemento, valores in diccionario.items()
+    ]
+    lista_resultados = sorted(lista_resultados, key=lambda x: x[0])
+    return lista_resultados
 
 
 def pregunta_07():
@@ -149,7 +248,24 @@ def pregunta_07():
     ]
 
     """
-    return
+
+    with open("data.csv") as hd:
+        lista = []
+        diccionario = {}
+        for linea in hd:
+            linea = linea.strip().split()
+            letra, numero = linea[0:2]
+            numero = int(numero)
+            lista.append((numero, letra))
+        for numero, letra in lista:
+            if numero not in diccionario.keys():
+                diccionario[numero] = []
+            diccionario[numero].append(letra)
+        nueva_lista = [
+            (numero, letras)
+            for numero, letras in sorted(diccionario.items(), key=lambda x: x[0])
+        ]
+    return nueva_lista
 
 
 def pregunta_08():
@@ -174,7 +290,24 @@ def pregunta_08():
     ]
 
     """
-    return
+    with open("data.csv") as hd:
+        lista = []
+        diccionario = {}
+        for linea in hd:
+            linea = linea.strip().split()
+            letra, numero = linea[0:2]
+            numero = int(numero)
+            lista.append((numero, letra))
+        for numero, letra in lista:
+            if numero not in diccionario.keys():
+                diccionario[numero] = []
+            diccionario[numero].append(letra)
+        nueva_lista = [
+            (numero, sorted(set(letras)))
+            for numero, letras in sorted(diccionario.items(), key=lambda x: x[0])
+        ]
+        print(diccionario)
+    return nueva_lista
 
 
 def pregunta_09():
@@ -197,7 +330,23 @@ def pregunta_09():
     }
 
     """
-    return
+
+    lista = []
+    diccionario = {}
+    with open("data.csv") as hd:
+
+        for linea in hd:
+            linea = linea.strip().split()[4].split(",")
+            # print(linea)
+            for elemento in linea:
+                elemento = elemento.split(":")[0]
+                # print(elemento)
+                diccionario[elemento] = diccionario.get(elemento, 0) + 1
+                nuevo_diccionario = dict(
+                    sorted(diccionario.items(), key=lambda x: x[0])
+                )
+
+    return nuevo_diccionario
 
 
 def pregunta_10():
@@ -218,7 +367,17 @@ def pregunta_10():
 
 
     """
-    return
+    with open("data.csv") as hd:
+        lista = []
+        for linea in hd:
+            linea = linea.strip().split()
+            (num, cant, cant2) = (
+                linea[0],
+                len(linea[3].split(",")),
+                len(linea[4].split(",")),
+            )
+            lista.append((num, cant, cant2))
+    return lista
 
 
 def pregunta_11():
@@ -236,10 +395,16 @@ def pregunta_11():
         "f": 134,
         "g": 35,
     }
-
-
     """
-    return
+    diccionario = {}
+    with open("data.csv") as hd:
+        for linea in hd:
+            _, num, _, letras, _ = linea.split()
+            num = int(num)
+            for letra in letras.split(","):
+                diccionario[letra] = diccionario.get(letra, 0) + num
+        nuevo = dict(sorted(diccionario.items(), key=lambda x: x[0]))
+    return nuevo
 
 
 def pregunta_12():
@@ -257,4 +422,34 @@ def pregunta_12():
     }
 
     """
-    return
+    diccionario = {}
+    lista = []
+    with open("data.csv") as hd:
+        for linea in hd:
+            clave, _, _, _, valores = linea.split()
+            valores = valores.split(",")
+            for par in valores:
+                _, valor = par.split(":")
+                lista.append((clave, int(valor)))
+        for clave, valor in lista:
+            if clave not in diccionario.keys():
+                diccionario[clave] = []
+            diccionario[clave].append(valor)
+        for clave, valor in diccionario.items():
+            diccionario[clave] = sum(diccionario[clave])
+        diccionario = dict(sorted(diccionario.items(), key=lambda x: x[0]))
+    return diccionario
+
+
+# print(pregunta_01())
+# print(pregunta_02())
+# print(pregunta_03())
+# print(pregunta_04())
+# print(pregunta_05())
+# print(pregunta_06())
+# print(pregunta_07())
+# print(pregunta_08())
+# print(pregunta_09())
+# print(pregunta_10())
+# print(pregunta_11())
+# print(pregunta_12())
